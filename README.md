@@ -19,93 +19,93 @@ A minimal Actix Web server that streams an `.mp4` file using HTTP `Range` reques
 │   └── main.rs
 └── videos
     └── sample.mp4
+```
 
-Requirements
+## Requirements
 
-    Rust (stable) + Cargo
+- Rust (stable) + Cargo
+- Install Rust: https://rustup.rs/
 
-Install Rust: https://rustup.rs/
-Setup
+## Setup
 
-    Create a new Rust project (if you haven’t already):
+1. Create a new Rust project (if you haven't already):
 
-Bash
-
+```bash
 cargo new actix-video-stream
 cd actix-video-stream
+```
 
-    Add dependencies to Cargo.toml:
+2. Add dependencies to Cargo.toml:
 
-toml
-
+```toml
 [dependencies]
 actix-web = "4"
+```
 
-    Place your video file at:
+3. Place your video file at:
 
-text
-
+```text
 videos/sample.mp4
+```
 
-    The server expects this path relative to the working directory where you run the binary.
+The server expects this path relative to the working directory where you run the binary.
 
-Run
+## Run
 
-Bash
-
+```bash
 cargo run
+```
 
 Server will start at:
 
-text
-
+```text
 http://127.0.0.1:8080
+```
 
-Usage
-Stream endpoint
+## Usage
 
-    GET /stream
+### Stream endpoint
 
-Example:
+GET `/stream`
 
-Bash
+**Example:**
 
+```bash
 curl -v http://127.0.0.1:8080/stream --output out.mp4
+```
 
-Range request example (partial download)
+### Range request example (partial download)
 
-Bash
-
+```bash
 curl -v \
   -H "Range: bytes=0-999999" \
   http://127.0.0.1:8080/stream \
   --output part.mp4
+```
 
 You should see a response similar to:
 
-    Status: 206 Partial Content
-    Header: Content-Range: bytes 0-999999/<total_size>
+```text
+Status: 206 Partial Content
+Header: Content-Range: bytes 0-999999/<total_size>
+```
 
-Play in a browser
+### Play in a browser
 
-Open:
-
-text
-
-http://127.0.0.1:8080/stream
+Open: http://127.0.0.1:8080/stream
 
 Or embed in HTML:
 
-HTML
-
+```html
 <video controls width="800" src="http://127.0.0.1:8080/stream"></video>
+```
 
-Notes / Limitations
+## Notes / Limitations
 
-    This implementation reads the requested range into memory (Vec<u8>) before responding. For large ranges or high concurrency, you’ll want a true streaming body instead of buffering the full chunk.
-    The code always responds with PartialContent even when there is no Range header. Many clients still work fine, but you may want to return 200 OK when serving the full file.
-    Minimal validation is performed on the Range header (e.g., out-of-bounds ranges are not fully handled).
+- This implementation reads the requested range into memory (Vec<u8>) before responding. For large ranges or high concurrency, you'll want a true streaming body instead of buffering the full chunk.
+- The code always responds with PartialContent even when there is no Range header. Many clients still work fine, but you may want to return 200 OK when serving the full file.
+- Minimal validation is performed on the Range header (e.g., out-of-bounds ranges are not fully handled).
 
-License
+## License
 
 MIT (or choose your preferred license)
