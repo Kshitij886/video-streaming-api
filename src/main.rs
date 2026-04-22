@@ -44,6 +44,7 @@ async fn stream_video(req: HttpRequest) -> Result<impl Responder> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Server is running in port 8080");
     HttpServer::new(|| App::new().route("/stream", web::get().to(stream_video)))
         .bind("127.0.0.1:8080")?
         .run()
